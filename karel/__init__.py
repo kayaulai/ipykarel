@@ -1,5 +1,5 @@
 """
-karel_robot - a small ASCII-world simulator and matplotlib-based animator
+ipykarel - a small ASCII-world simulator and matplotlib-based animator
 for teaching the classic "Karel the Robot" exercises, usable both inside
 Jupyter notebooks and in plain Python scripts.
 """

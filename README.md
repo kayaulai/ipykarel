@@ -92,7 +92,7 @@ test_karel(
 ## Package layout
 
 ```
-karel_robot/
+ipykarel/
 ├── karel/
 │   ├── __init__.py       # public API
 │   ├── world.py          # KarelWorld, ASCII (de)serialization, pipeline helpers
