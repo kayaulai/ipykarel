@@ -1,4 +1,4 @@
-# karel-robot
+# ipykarel
 
 A small ASCII-world simulator and matplotlib-based animator for the classic
 "Karel the Robot" teaching exercises. Works both inside Jupyter notebooks
@@ -41,7 +41,7 @@ ASCII world format — one row per line, read bottom-to-top as (x, y):
 - `.` empty cell
 
 ```python
-from karel import activate_world
+from ipykarel import activate_world
 
 world = activate_world(ascii_lines=[
     "......",
@@ -62,7 +62,7 @@ ani.save("karel_run.gif", writer="pillow")
 ### Inside a Jupyter notebook
 
 ```python
-from karel import run_karel_ipynb_pipeline
+from ipykarel import run_karel_ipynb_pipeline
 
 def program():
     move()
@@ -80,7 +80,7 @@ run_karel_ipynb_pipeline(program, ascii_lines=[
 ### Testing a student's solution against an expected end state
 
 ```python
-from karel import test_karel
+from ipykarel import test_karel
 
 test_karel(
     program,
@@ -93,7 +93,7 @@ test_karel(
 
 ```
 ipykarel/
-├── karel/
+├── ipykarel/
 │   ├── __init__.py       # public API
 │   ├── world.py          # KarelWorld, ASCII (de)serialization, pipeline helpers
 │   └── fonts/             # (optional) drop an emoji .ttf here

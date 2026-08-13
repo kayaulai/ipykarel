@@ -1,4 +1,4 @@
-from karel import activate_world, KarelWorld, KarelError
+from ipykarel import activate_world, KarelWorld, KarelError
 
 
 SIMPLE_WORLD = [
