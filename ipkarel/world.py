@@ -467,10 +467,9 @@ def run_karel_ipynb_pipeline(
     })
 
     try:
-        print("ℹ️ Karel is still running. If this keeps going for minutes, check for infinite loops.",
-              end="\r", flush=True)
+        print("ℹ️ Karel is still running. If this keeps going for minutes, check for infinite loops.", flush=True)
         f(**args)
-        print("ℹ️ Karel is done running; creating animation.                                        ",
+        print("ℹ️ Karel is done running; creating animation.",
               flush=True)
     except Exception as e:
         tb = traceback.extract_tb(e.__traceback__)
