@@ -42,6 +42,15 @@ except ImportError:  # pragma: no cover - IPython not installed
 # requiring a font file to be shipped/downloaded.
 _PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 _DEFAULT_FONT_PATH = os.path.join(_PACKAGE_DIR, "fonts", "Symbola.ttf")
+_EMOJI_RE = re.compile(
+    "["
+    "\U0001F300-\U0001FAFF"  # symbols & pictographs, supplemental symbols
+    "\U00002600-\U000027BF"  # misc symbols & dingbats (includes ❌ ℹ)
+    "\U0001F1E6-\U0001F1FF"  # regional indicators
+    "\uFE0F"                  # variation selector-16
+    "]+",
+    flags=re.UNICODE,
+)
 
 
 def _load_emoji_font(font_path: str | None = None) -> fm.FontProperties | None:
@@ -52,6 +61,27 @@ def _load_emoji_font(font_path: str | None = None) -> fm.FontProperties | None:
 
 
 emoji_font = _load_emoji_font()
+
+_TITLE_SUBSTITUTIONS = {
+    "\u274C": "\u00D7",  # ❌ cross mark -> × multiplication sign
+    "\u2139": "(i)",      # ℹ info -> "(i)"
+}
+
+
+def _title_safe(text: str) -> str:
+    """Make text destined for a plot title render cleanly in any font.
+
+    Plot titles are body text (step numbers, action names, error messages)
+    and should stay in a normal, readable sans-serif font rather than the
+    dedicated emoji font (which is reserved for the single-character
+    robot/treasure/status markers). Known status symbols are swapped for a
+    plain-font equivalent (e.g. ❌ -> ×) so the meaning is preserved; any
+    other stray emoji is simply dropped.
+    """
+    for emoji, substitute in _TITLE_SUBSTITUTIONS.items():
+        text = text.replace(emoji, substitute)
+    return _EMOJI_RE.sub("", text).strip()
+
 
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = [
@@ -369,8 +399,13 @@ class KarelWorld:
             dx, dy = offsets[facing]
             dir_marker.set_position((x + .5 + dx, self.size[1] - y - .5 + dy))
 
-            label_text = ax.set_title(f"Step {i + 1}: {frame['label']}")
-
+            is_error_frame = "\u274C" in frame["label"]  # check before substitution
+            title_text = _title_safe(frame["label"])
+            label_text = ax.set_title(
+                f"Step {i + 1}: {title_text}",
+                color="crimson" if is_error_frame else "black",
+            )
+            
             for m in list(beeper_markers.values()):
                 m.remove()
             beeper_markers.clear()
